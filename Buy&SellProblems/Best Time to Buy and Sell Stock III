@@ -1,0 +1,36 @@
+class Solution {
+public:
+int solve(vector<int>& prices , int i , int buy, int limit,  vector<vector<vector<int>>>& dp){
+    if(i == prices.size()) return 0;
+    if(limit == 0){
+        return 0;
+    }
+    if (dp[i][buy][limit] != -1) {
+        return dp[i][buy][limit];
+    }
+    if(buy==1){
+        // two options we have either we can buy or we cam skip /ignore
+        // buy
+        int take = -prices[i] + solve(prices , i+1 , 0, limit , dp);
+        // ignore
+        int skip = solve(prices , i+1 , 1, limit, dp);
+
+        return dp[i][buy][limit] = max(take, skip);
+    }
+    else { // buy->0
+         // two options we have either we can sell or we can skip /ignore
+         int sell = prices[i] + solve(prices , i+1 ,1 ,limit-1 , dp);
+
+         int skip = solve(prices , i+1 , 0, limit,  dp);
+          return dp[i][buy][limit] = max(sell, skip);
+    }
+}
+    int maxProfit(vector<int>& prices) {
+        int n = prices.size();
+        vector<vector<vector<int>>> dp(n, vector<vector<int>>(2, vector<int>(3 , -1)));
+        int buy = 1; // allowed to buy
+        int limit = 2;
+        int ans = solve(prices , 0 , buy,limit, dp);
+        return ans;
+    }
+};
