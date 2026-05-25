@@ -1,0 +1,21 @@
+class Solution {
+public:
+    void maxProfitFinder(int &minPrice, int &maxProfit, int i, vector<int>& prices) {
+        if (i == prices.size()) {
+            return;
+        }
+
+        minPrice = min(minPrice, prices[i]);
+        maxProfit = max(maxProfit, prices[i] - minPrice);
+
+        maxProfitFinder(minPrice, maxProfit, i + 1, prices);
+    }
+
+    int maxProfit(vector<int>& prices) {
+        int minPrice = INT_MAX;
+        int maxProfit = 0;   // profit can’t be negative
+
+        maxProfitFinder(minPrice, maxProfit, 0, prices);
+        return maxProfit;
+    }
+};
