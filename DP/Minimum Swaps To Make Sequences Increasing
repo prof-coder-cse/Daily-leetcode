@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int solve (vector<int>& nums1, vector<int>& nums2 , int curr , int p1 , int p2, vector<vector<int>>& dp, int isswap){
+        // base case
+        if(curr == nums1.size()){
+            return 0;
+        }
+          if(dp[curr][isswap] != -1) {
+            return dp[curr][isswap];
+        }
+
+       int swap =INT_MAX;
+       int noswap = INT_MAX;
+        if(p1 < nums2[curr] && p2 < nums1[curr]){
+             swap = 1 + solve(nums1 , nums2 , curr+1 , nums2[curr] , nums1[curr], dp , 1);
+        }
+        if(p1 < nums1[curr] && p2 <nums2[curr]  ){
+            noswap = solve(nums1 , nums2 ,curr+1 , nums1[curr] , nums2[curr], dp , 0);
+        }
+        dp[curr][isswap] =  min(swap , noswap);
+        return dp[curr][isswap];
+    }
+    int minSwap(vector<int>& nums1, vector<int>& nums2) {
+        int n = nums1.size();
+
+         vector<vector<int>> dp(n, vector<int>(2, -1));
+        
+        int ans = solve(nums1 , nums2 , 0 ,-1 , -1, dp , 0);
+        return ans;
+    }
+};
