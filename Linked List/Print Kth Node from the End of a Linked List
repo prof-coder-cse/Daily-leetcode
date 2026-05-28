@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int getlen(ListNode* head){
+        int len = 0;
+        while(head != NULL){
+            len++;
+            head= head->next;
+        }
+        return len;
+    }
+    int kthNodeFromEnd(ListNode* head, int k) {
+       int len = getlen(head); // humne length nikal li puri list ki
+       int pos = len - k; // fir humne starting se hi chlaya loop aur print kar diya
+       while(pos--){
+        head = head->next;
+       }
+         return head->val;
+    }
+};
