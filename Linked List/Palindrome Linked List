@@ -1,0 +1,61 @@
+class Solution {
+public:
+    int getlen(ListNode* head){
+        int len=0;
+        while(head!= NULL){
+            len++;
+            head = head->next;
+
+        }
+        return len;
+    }
+    ListNode* middlenode(ListNode* head){
+        ListNode* slow = head;
+        ListNode* fast = head;
+        while(fast != NULL && fast->next != NULL){
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        // slow will be on mid
+        return slow;
+    }
+    ListNode* reversell(ListNode* head){
+        ListNode* prev = NULL;
+        ListNode* curr = head;
+
+        while(curr != NULL){
+            ListNode* forward = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = forward;
+        }
+        return prev;
+
+    }
+    bool isPalindrome(ListNode* head) {
+        int len =  getlen(head);
+        ListNode* midnode = middlenode(head);
+
+        // ab hume aadhi linkedlist reverse krni hai
+        // lekin hum pehle mid dekheneg ki lengt odd hai ya even
+        ListNode* finalmid=NULL;
+        if(len % 2 != 0){  // odd wale case me hume mid lekar koi fayda nhi isliye mid ka next lenge
+            finalmid = midnode->next;
+        }
+        else{
+            finalmid=midnode;
+        }
+
+        finalmid = reversell(finalmid);
+
+        ListNode* temp = head;
+        while(temp!=NULL && finalmid!= NULL){
+            if(temp->val != finalmid->val){
+                return false;
+            }
+            temp=temp->next;
+            finalmid=finalmid->next;
+        }
+        return true;
+    }
+};
