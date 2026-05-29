@@ -1,0 +1,45 @@
+class Solution {
+public:
+    ListNode* reversell(ListNode* head){
+        ListNode* prev = NULL;
+        ListNode* curr = head;
+        while(curr!= NULL){
+            ListNode* forward = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr=forward;
+        }
+        // return new head;
+        return prev;
+    }
+    ListNode* plusOne(ListNode* head) {
+      // code here
+        // pehle reverse kareneg linklist
+        head = reversell(head);
+        
+        int carry =1;
+        ListNode* temp=head;
+        while(temp != NULL){
+            int data= temp->val;
+            int sum = data + carry;
+            int digit = sum%10;
+            carry = sum/10;
+            
+            // insert digit into curr node
+            temp->val= digit;
+            
+            if(temp->next == NULL && carry != 0){
+                // we have to create new node
+                ListNode* newNode = new ListNode(carry);
+                // iss node ko temp ke next me lga do
+                temp->next=newNode;
+                temp = newNode;
+            }
+            
+            temp = temp->next;
+        }
+        head = reversell(head);
+        return head;
+       
+    }
+};
