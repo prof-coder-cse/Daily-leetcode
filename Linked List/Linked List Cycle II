@@ -1,0 +1,35 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        // we can also use unorderedmap to mark visited of node and if it is visited again mark it false and return it
+
+        
+        ListNode* slow =head;
+        ListNode* fast = head;
+
+        while(fast != NULL && fast->next != NULL){
+            slow = slow->next;
+            fast = fast->next->next;
+
+            if(slow == fast){
+                // ek pointer ko dubara head se start karva do
+                fast = head;
+                // ab dono ko ek step aage chlao jab tak dubara nhi milte
+                while( slow != fast){
+                    slow = slow->next;
+                    fast = fast->next;
+                }
+                return fast; // meeting node where cycle begin
+            }
+        }
+        return nullptr;
+    }
+};
