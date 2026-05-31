@@ -1,0 +1,43 @@
+struct Node {
+    int data;
+    Node* next;
+    Node(int x) : data(x), next(nullptr) {}
+};
+
+class Solution {
+public:
+    Node* reverseKGroup(Node* head, int k) {
+        int count  = 0;
+        Node*temp = head;
+        while(temp != NULL && count<k){
+            temp = temp->next;
+            count++;
+        }
+        // agar k ka group exist krta hai
+        if(count == k){
+            // reverse kro group aur baki grp recursion reverse kar dega
+           Node* prev = NULL;
+              Node* curr=head;
+              Node* forward=NULL;
+
+              int i=0 ;// k node hi reverse karni hai
+              while(i<k){
+                forward=curr->next;
+                curr->next=prev;
+                prev=curr;
+                curr=forward;
+                i++;
+              }
+
+              // recursion
+              Node* recursionhead= reverseKGroup(forward, k);
+              // join both ll
+              head->next=recursionhead;
+
+              return prev;
+        }
+         else{
+             return head;
+        }
+    }
+};
