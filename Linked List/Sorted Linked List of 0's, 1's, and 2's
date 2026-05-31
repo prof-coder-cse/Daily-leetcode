@@ -1,0 +1,72 @@
+struct Node {
+    int data;
+    Node *next;
+    Node(int x) : data(x), next(nullptr) {}
+};
+
+class Solution {
+public:
+    void insertattail(Node* & toinsert , Node* &head, Node*& tail){
+        if(head == NULL && tail== NULL){
+            head = toinsert;
+            tail = toinsert;
+        }
+        else{
+            tail->next = toinsert;
+            tail = toinsert;
+        }
+    }
+    Node* sortList(Node* head) {
+        Node* zerohead = NULL;
+        Node* zerotail = NULL;
+
+        Node* onehead = NULL;
+        Node* onetail = NULL;
+        
+        Node* twohead = NULL;
+        Node* twotail = NULL;
+
+        Node* temp = head;
+        while(temp != NULL){
+            // add into respective ll
+            Node* toinsert = temp;
+            temp = temp->next;
+            toinsert->next = NULL;
+
+            if(toinsert->data == 0){
+                insertattail(toinsert , zerohead, zerotail);
+            }
+            else if(toinsert->data == 1){
+                insertattail(toinsert, onehead , onetail);
+            }
+            else if(toinsert->data == 2){
+                insertattail(toinsert , twohead, twotail);
+            }
+        }
+        // merge karna hai teeno list ko ab
+        // koi list empty bhi ho skti
+        if(zerohead != NULL){
+            if(onehead != NULL){
+                zerotail->next = onehead;
+                onetail->next = twohead;
+                return zerohead;
+            }
+            else{
+                // one wali null hai matlab
+                zerotail->next = twohead;
+                return zerohead;
+            }
+        }
+        else{
+            // zero not exist
+            if(onehead != NULL){
+                onetail->next = twohead;
+                return onehead;
+            }
+            else{
+                // one bhi exist nhi krti
+                return twohead;
+            }
+        }
+    }
+};
