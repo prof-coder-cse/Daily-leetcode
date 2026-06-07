@@ -1,0 +1,29 @@
+class Solution {
+public:
+    // TC - O(n)
+    // SC- O(n) of unordered set
+    int longestConsecutive(vector<int>& nums) {
+        int n = nums.size();
+        unordered_set<int> st;
+        int length = 0;
+        int maxlength  = 0;
+
+        for(auto num:nums){
+            st.insert(num);
+        }
+        for(auto ele: st){
+            int currelement = ele;
+            int elementseekkam = ele-1;
+            if(st.find(elementseekkam) == st.end()){
+                length =1 ;
+
+               while(st.find(currelement + 1) != st.end()) {
+               currelement++;
+               length++;
+               }
+            }
+            maxlength = max(maxlength, length);
+        }
+        return maxlength;
+    }
+};
