@@ -1,0 +1,40 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    void inorder(TreeNode* root, vector<int>& ans){
+        if(root == NULL) return;
+
+        inorder(root->left, ans);
+        ans.push_back(root->val);
+        inorder(root->right , ans);
+    }
+    // function to fill tree as same as of inorder
+    void filltree(TreeNode* root , vector<int>& ans, int& idx){
+       if(root == NULL) return ;
+
+       filltree(root->left , ans , idx);
+       root->val = ans[idx];
+       idx++;
+       filltree(root->right , ans , idx);
+    }
+    void recoverTree(TreeNode* root) {
+       vector<int> ans;
+        inorder(root , ans);
+       
+        sort(ans.begin(), ans.end());
+
+        // check karo tree me konsi node apni place par nhi hai
+           int idx = 0;
+           filltree(root, ans, idx);
+    }
+};
