@@ -1,0 +1,80 @@
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        vector<int> mp(26,0);
+
+        for(char &ch: tasks){
+            mp[ch-'A']++;
+        }
+
+        sort(mp.begin() , mp.end());
+
+        int maxfreq = mp[25];
+        int gapbetweentwopoints = maxfreq-1;
+        int idleslots = n*gapbetweentwopoints;
+
+        for(int i=24 ; i>=0 ; i--){
+            idleslots -= min(gapbetweentwopoints , mp[i]);
+        }
+
+        if(idleslots > 0){
+            return tasks.size() + idleslots;
+        }
+
+        return tasks.size();
+    }
+};
+
+
+
+using Heap
+
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+       unordered_map<char , int>mp;
+       for(auto ch:tasks){
+        mp[ch]++;
+       } 
+       priority_queue<int>pq ;
+       for(auto ch:mp){
+        pq.push(ch.second);
+       }
+       int time = 0;
+       while(!pq.empty()){
+        vector<int>temp;
+        int count = n+1; // Set number of tasks allowed in this cycle
+         // Counter to track how many tasks we run in this cycle
+            int i = 0;
+
+            while(i<count && !pq.empty()){
+                int freq = pq.top();
+                pq.pop();
+
+                freq--;   // Reduce its count as we’re running it once
+                // freq still not 0 again push it into pq
+                if(freq > 0){
+                   temp.push_back(freq);
+                }
+                
+                // Count 1 unit of time for this task
+                time++;
+
+                // Move to next slot in the cycle
+                i++;
+            }
+            // push remaining tasks back into heap
+           for(auto f : temp){
+               pq.push(f); // ✅ ADDED
+           }
+
+           // handle idle time
+           if(pq.empty()){
+               break; // no idle needed
+           }
+
+           time += (count - i); // ✅ ADD idle slots
+       }
+        return time; // ✅ ADDED
+    }
+};
