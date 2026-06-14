@@ -1,0 +1,40 @@
+class Solution {
+public:
+    ListNode* middleNode(ListNode* head) {
+        ListNode* slow = head;
+        ListNode* fast = head;
+        while(fast!=NULL && fast->next!=NULL){
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+        return slow;
+    }
+     ListNode* reverseList(ListNode* head) {
+        ListNode* prev=NULL;
+        ListNode* curr=head;
+        while(curr != NULL){
+            ListNode* forward=curr->next;
+            curr->next=prev;
+            prev=curr;
+            curr=forward;
+        }
+        head= prev;
+        return head;
+    }
+    int pairSum(ListNode* head) {
+        int maxi = INT_MIN;
+         ListNode* middle =  middleNode(head);
+         ListNode* second = reverseList(middle);
+
+         ListNode* firsttemp = head;
+         ListNode* secondtemp = second;
+
+         while(secondtemp){
+           int sum = firsttemp->val + secondtemp->val;
+           maxi = max(maxi , sum);
+           firsttemp = firsttemp->next;
+           secondtemp = secondtemp->next;
+         }
+         return maxi;
+    }
+};
