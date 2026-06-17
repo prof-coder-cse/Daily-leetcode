@@ -1,0 +1,66 @@
+class LRUCache {
+public:
+
+    list<int>dll; // key
+    map<int , pair<list<int>::iterator, int>>mp;  // storing key and pair of address and value
+
+    int n;
+    LRUCache(int capacity) {
+        n = capacity;
+    }
+    void makerecentlyused(int key){
+       // pehle erase karenge
+       // iss key ka address map se milega
+       dll.erase(mp[key].first);
+
+       // ab usko front me dalna
+       dll.push_front(key);
+
+       // ab iska address update ho gya to map me dalna hai
+       mp[key].first = dll.begin(); // dll.begin() apne aap address de deta
+
+    }
+    int get(int key) {
+        // agar vo key map me hai hi nhi
+        if(mp.find(key) == mp.end()){
+            return -1;
+        }
+        // agar present hai , to mujhe use recently used mark karunga , front me laaunga
+        makerecentlyused(key) ; // doubly ll se erase krte the aur front me daal dete the
+        // ab uss key ki value bhejni hai
+        return mp[key].second;
+    }
+    
+    void put(int key, int value) {
+        // agar map me hai already to value update kar denge aur recentlyused me bhi daal denge usko
+        if(mp.find(key) != mp.end()){
+            mp[key].second = value;
+            makerecentlyused(key);
+        }
+        else{
+            // nhi present map me to daalenge
+            dll.push_front(key);
+            // map me bhi daalenge
+            mp[key] = {dll.begin() , value};
+            n--;
+        }
+
+        if(n<0){
+            // n se jayada element nhi ho sjte agar ho gye to least recently used ko ta denge..matlab back wale ko
+            int key_to_delete = dll.back();
+            mp.erase(key_to_delete);
+
+            dll.pop_back();
+
+            // ab delete ho gya to vapis se n matlab capacity bda denge taki agla elment aa ske
+            n++;
+        }
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
