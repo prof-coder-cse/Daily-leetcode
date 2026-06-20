@@ -1,0 +1,101 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        if(root == NULL){
+            return "";
+        }
+        string s="";
+        queue<TreeNode*>q;
+        q.push(root);
+        while(!q.empty()){
+            TreeNode* front = q.front();
+            q.pop();
+
+            if(front == NULL) s+= "#,";
+            else{
+                s += (to_string(front->val) + ',');
+            }
+
+            if(front != NULL){
+                q.push(front->left);
+                q.push(front->right);
+            }
+        }
+        return s;
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        if(data.size() == 0){
+            return NULL;
+        }
+
+        vector<string> nodes;
+
+        string temp = "";
+
+        // split by comma
+        for(char ch : data){
+
+            if(ch == ','){
+                nodes.push_back(temp);
+                temp = "";
+            }
+            else{
+                temp += ch;
+            }
+        }
+
+        // create root
+        TreeNode* root = new TreeNode(stoi(nodes[0]));
+
+        queue<TreeNode*> q;
+        q.push(root);
+
+        int i = 1;
+
+        while(!q.empty()){
+
+            TreeNode* front = q.front();
+            q.pop();
+
+            // LEFT CHILD
+            if(nodes[i] != "#"){
+
+                TreeNode* leftNode = new TreeNode(stoi(nodes[i]));
+
+                front->left = leftNode;
+
+                q.push(leftNode);
+            }
+
+            i++;
+
+            // RIGHT CHILD
+            if(nodes[i] != "#"){
+
+                TreeNode* rightNode = new TreeNode(stoi(nodes[i]));
+
+                front->right = rightNode;
+
+                q.push(rightNode);
+            }
+
+            i++;
+        }
+
+        return root;
+    }
+};
+
