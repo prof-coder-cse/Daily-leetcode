@@ -1,0 +1,49 @@
+class Solution {
+public: 
+
+   // ex n=1 => "1"
+   // n =2 => is se pehle me ek baar ek aaya hai to => "11"
+//  n=3 => is se pehle me 2 baar ek aaya hai => "21"
+  // n=4 => is se pehle wale me 1 baar 2 aaya hai aur 1 baar 1 aaya hai ye concept hai
+
+    string countAndSay(int n) {
+
+        // Base case:
+        // First term of the sequence is always "1"
+        if (n == 1) {
+            return "1";
+        }
+
+        // Get the previous term recursively
+        string say = countAndSay(n - 1);
+
+        // Store the current term
+        string result = "";
+
+        // Traverse previous term and count consecutive characters
+        for (int i = 0; i < say.length(); i++) {
+
+            // Current character we are observing
+            char ch = say[i];
+
+            // At least one occurrence exists
+            int count = 1;
+
+            // Count all consecutive same characters
+            while (i < say.size() - 1 && say[i] == say[i + 1]) {
+                count++;
+                i++;
+            }
+
+            // Append:
+            // count + character
+            //
+            // Example:
+            // count = 3, ch = '1'
+            // result += "31"
+            result = result + to_string(count) + string(1, ch);
+        }
+
+        return result;
+    }
+};
