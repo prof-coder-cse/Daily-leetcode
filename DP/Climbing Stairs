@@ -1,0 +1,35 @@
+class Solution {
+public:
+   int solve(int n , vector<int>&dp){
+    if(n < 0) return 0;
+    if(n == 0) return 1;
+
+    if(dp[n] != -1){
+        return dp[n];
+    }
+
+    int onestep = solve(n-1 , dp);
+    int twostep = solve(n-2 , dp);
+
+    return dp[n] = onestep + twostep; // store result
+   }
+
+   int solvetab(int n){
+    vector<int> dp(n+1, -1);
+    dp[0] = 1;
+    dp[1] = 1;
+    for(int a=2 ; a<=n ; a++){
+         int onestep = dp[a-1];
+         int twostep = dp[a-2];
+
+     dp[a] = onestep + twostep; 
+
+    }
+    return dp[n];
+   }
+
+    int climbStairs(int n) {
+        //vector<int> dp(n+1, -1); // initialize with -1
+        return solvetab(n);
+    }
+};
