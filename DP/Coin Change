@@ -1,0 +1,91 @@
+class Solution {
+public:
+     int solveusingRec(vector<int>& coins, int amount){
+      // base case
+      if(amount == 0){
+        return 0;
+      }
+        int mini = INT_MAX;
+        for(int i=0 ; i<coins.size(); i++){
+            if(coins[i] <= amount ){
+              // valid case
+              //ab maine ek coin use kar liya aur baki recursion ko bhej diya rest amount
+              int recuans = solveusingRec(coins , amount - coins[i]);
+              // ab ya to answer banega ya nhi
+              if(recuans != INT_MAX){
+                // matlab kuch valid ans mila hai check karo ye minimum naswer hai ya nhi
+                 mini = min(mini , 1+ recuans); // 1 matlab jo coin use kiya tha maine ek recursion se pehle
+              }
+
+            }
+        }
+        return mini;
+     }
+
+      int solveusingMemo(vector<int>& coins, int amount , vector<int>& dp){
+      // base case
+      if(amount == 0){
+        return 0;
+      }
+      if(dp[amount] != -1){
+        return dp[amount];
+      }
+        int mini = INT_MAX;
+        for(int i=0 ; i<coins.size(); i++){
+            if(coins[i] <= amount ){
+              // valid case
+              //ab maine ek coin use kar liya aur baki recursion ko bhej diya rest amount
+              int recuans = solveusingMemo(coins , amount - coins[i] , dp);
+              // ab ya to answer banega ya nhi
+              if(recuans != INT_MAX){
+                // matlab kuch valid ans mila hai check karo ye minimum naswer hai ya nhi
+                 mini = min(mini , 1+ recuans); // 1 matlab jo coin use kiya tha maine ek recursion se pehle
+              }
+
+            }
+        }
+        dp[amount]= mini;
+        return mini;
+    }
+
+    // tabulation method
+    int solveusingTab(vector<int>& coins , int amount){
+        // create dp array
+        int n = amount;
+        vector<int>dp(n+1 , INT_MAX);
+       // 0 amount ke liye answer 0 hai
+        dp[0]=0;
+        // loopp
+        for(int value=1 ; value<=amount ; value++){
+               int mini = INT_MAX;
+        for(int i=0 ; i<coins.size(); i++){
+            if(coins[i] <= value ){
+              // valid case
+              //ab maine ek coin use kar liya aur baki recursion ko bhej diya rest amount
+              int recuans = dp[value - coins[i]];
+              // ab ya to answer banega ya nhi
+              if(recuans != INT_MAX){
+                // matlab kuch valid ans mila hai check karo ye minimum naswer hai ya nhi
+                 mini = min(mini , 1+ recuans); // 1 matlab jo coin use kiya tha maine ek recursion se pehle
+              }
+
+            }
+        }
+        dp[value]= mini;
+        }
+        return dp[amount];
+    }
+    int coinChange(vector<int>& coins, int amount) {
+        int n= amount;
+       // vector<int>dp(n+1 , -1);
+        //int ans = solveusingMemo(coins , amount , dp);
+        int ans =  solveusingTab(coins , amount);
+        if(ans == INT_MAX){
+            return -1;
+        }
+        else{
+             return ans;
+        }
+        
+    }
+};
