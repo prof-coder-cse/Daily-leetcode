@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<int> nextGreaterElements(vector<int>& nums) {
+        int n = nums.size();
+        stack<int>st;
+        vector<int>nge(n);
+
+        for(int i=2*n-1 ; i>=0 ; i--){
+            // imaginary nums array ko duble kar rahe hai duplicate bna kar not in real
+            // ex - [1,2,1,   1,2,1]  lekin mujhe to bs n tak ke next greater element chahhiye
+            while(!st.empty() && st.top() <= nums[i%n]){
+                st.pop();
+            }
+
+            if(i<n){
+                // ab jab n se neeche hai inke chahhiye mujhe nge to ab jo stack ke top par hoga vhi hai next greater
+                nge[i] = st.empty() ? -1 : st.top();
+
+            }
+            // ab hum uss element ko bhi dalenge na kyuki ho skta hai vo bhi kisis ka nge ho
+            st.push(nums[i%n]);
+
+        }
+        return nge;
+    }
+};
