@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<string> buildArray(vector<int>& target, int n) {
+        int size = target.size();
+        // 1 sen tak read karenge number 
+        int stream = 1;
+
+        stack<int>st;
+        int i=0;
+        vector<string>result;
+
+        while(i<size && stream <= n){
+            result.push_back("Push");
+
+            if(stream == target[i]){
+                i++;
+                stream++;
+            }
+            else{
+                result.push_back("Pop");
+                stream++;
+            }
+        }
+        return result;
+    }
+};
