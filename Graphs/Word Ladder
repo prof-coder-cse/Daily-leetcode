@@ -1,0 +1,47 @@
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        queue<pair<string , int>>q;
+        unordered_set<string>st; // set for pushing all wordlist element into it for O(1) lookup
+        q.push({beginWord , 1});
+
+
+         // Insert all words into set for O(1) lookup
+        for (auto word : wordList) {
+            st.insert(word);
+        }
+         // If endWord is not present, transformation impossible
+        if (st.find(endWord) == st.end()) {
+            return 0;
+        }
+
+        while(!q.empty()){
+            auto front = q.front();
+            q.pop();
+
+            string currentword = front.first;
+            int level = front.second;
+
+            if(currentword == endWord){
+                return front.second;
+            }
+
+
+            for(int i=0; i<currentword.size(); i++){
+                char wordtoreplace = currentword[i];  // pehla original char save kar liya
+                for(int ch='a' ;ch <='z' ; ch++){
+                    if(ch == wordtoreplace) continue;
+                    currentword[i] = ch;
+
+                    if(st.find(currentword) != st.end()){
+                        q.push({currentword , level + 1});
+                        st.erase(currentword); // visited marked
+                    }
+                }
+                // restore original character
+                currentword[i] = wordtoreplace;
+            }
+        }
+        return 0;
+    }
+};
