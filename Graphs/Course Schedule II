@@ -1,0 +1,93 @@
+class Solution {
+public:
+     // Function to perform Topological Sort using Kahn's Algorithm (BFS)
+    void topoSort(unordered_map<int, vector<int>>& adjlist,
+                  int numCourses,
+                  vector<int>& toposort) {
+
+        queue<int> q;
+
+        // Stores indegree of every course
+        unordered_map<int, int> indegree;
+
+        // Calculate indegree of each node
+        // If u -> v exists, then indegree[v]++
+        for(auto i : adjlist) {
+            for(auto nbr : i.second) {
+                indegree[nbr]++;
+            }
+        }
+
+        // Push all nodes having indegree 0 into queue
+        // These courses have no prerequisites
+        for(int i = 0; i < numCourses; i++) {
+            if(indegree[i] == 0) {
+                q.push(i);
+            }
+        }
+
+        // Perform BFS
+        while(!q.empty()) {
+
+            // Remove node from queue
+            int top = q.front();
+            q.pop();
+
+            // Add node to topological ordering
+            toposort.push_back(top);
+
+            // Remove outgoing edges of current node
+            for(auto nbr : adjlist[top]) {
+
+                // Decrease indegree because prerequisite is completed
+                indegree[nbr]--;
+
+                // If indegree becomes 0,
+                // all prerequisites are completed
+                if(indegree[nbr] == 0) {
+                    q.push(nbr);
+                }
+            }
+        }
+    }
+
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        // Adjacency list representation of graph
+        unordered_map<int, vector<int>> adjlist;
+
+        // Build graph
+        // prerequisite[i] = [a,b]
+        // means b must be completed before a
+        // Therefore create edge:
+        //
+        // b ----> a
+        //
+        // Example:
+        // [1,0]
+        // 0 -> 1
+
+        for(auto i : prerequisites) {
+
+            int u = i[0]; // course to be taken
+            int v = i[1]; // prerequisite course
+
+            // Edge from prerequisite to dependent course
+            adjlist[v].push_back(u);
+        }
+
+        // Stores topological ordering
+        vector<int> toposort;
+
+        // Perform topological sort
+        topoSort(adjlist, numCourses, toposort);
+
+        // If all courses are present in topo ordering,
+        // graph has no cycle and all courses can be completed
+        if(toposort.size() == numCourses) {
+            return toposort;
+        }
+        else{
+            return {};
+        }
+    }
+};
