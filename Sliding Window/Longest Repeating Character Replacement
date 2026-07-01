@@ -1,0 +1,72 @@
+class Solution {
+public:
+    int characterReplacement(string s, int k) {
+
+        // Left pointer of sliding window
+        int left = 0;
+
+        // Stores length of longest valid substring found so far
+        int ans = 0;
+
+        int n = s.size();
+
+        // Frequency array for characters 'A' to 'Z'
+        vector<int> freq(26, 0);
+
+        // Frequency of the most common character in current window
+        int maxfreq = 0;
+
+        // Expand the window using right pointer
+        for(int right = 0; right < n; right++) {
+
+            // Include current character in the window
+            freq[s[right] - 'A']++;
+
+            // Update the maximum frequency character in the window
+            maxfreq = max(maxfreq, freq[s[right] - 'A']);
+
+            // If characters to replace exceed k,
+            // shrink the window from the left
+            while((right - left + 1) - maxfreq > k) {
+
+                // Remove left character from the window
+                freq[s[left] - 'A']--;
+
+                // Move left pointer forward
+                left++;
+            }
+
+            // Current window is valid, update answer
+            ans = max(ans, right - left + 1);
+        }
+
+        return ans;
+    }
+};
+//           BRUTE FORCE
+
+// class Solution {
+// public:
+//     int characterReplacement(string s, int k) {
+//         int n = s.size();
+//         int ans = INT_MIN;
+//         for(int i=0; i<n; i++){
+//             vector<int>freq(26 , 0);
+//             int maxfreq = 0;
+//             for(int j=i; j<n ; j++){
+//                  freq[s[j]- 'A']++;
+
+//                  // update maxfreq
+//                  maxfreq = max(maxfreq , freq[s[j] - 'A']);
+
+//                  int windowsize = j-i+1;
+//                  int replacement = windowsize - maxfreq;
+
+//                  if(replacement <= k){
+//                     ans = max(ans , windowsize);
+//                  }
+//             }
+//         }
+//         return ans;
+//     }
+// };
