@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        // use prefix and suffix conncept 
+        // if even number of negative are there , it will make positive 
+        // odd number of negative will lead to negative
+        int prefix = 1;
+        int suffix = 1;
+        int maxi = INT_MIN;
+        int n = nums.size();
+
+        for(int i=0; i<n ; i++){
+
+           if(prefix == 0) prefix = 1;
+           if(suffix == 0) suffix = 1;
+            prefix = prefix * nums[i];  // start from front
+            suffix = suffix * nums[n-i-1];   // start from back if i=1 then n-i-1 = n-1-1 = n-2
+
+            maxi = max(maxi , max(prefix , suffix));
+        }
+        return maxi;
+    }
+};
+
+// class Solution {
+// public:
+//     int maxProduct(vector<int>& nums) {
+//         int n = nums.size();
+//         int maxi = INT_MIN;
+//         for(int i=0; i<n ; i++){
+//             int product = 1;
+//             for(int j=i; j<n ; j++){
+//                 product *= nums[j];
+//                 maxi =max(maxi , product);
+//             }
+//         }
+//         return maxi;
+//     }
+// };
