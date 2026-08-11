@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        int n = s.size();
+        int m = p.size();
+        vector<int>ans;
+        vector<int>freq(26 , 0);
+        for (int i = 0; i < p.size(); i++) {
+            freq[p[i] - 'a']++;
+        }
+        string window = "";
+        int i = 0;
+        vector<int> freqWindow(26, 0);
+        for (int j = 0; j < s.size(); j++) {
+            window += s[j];
+            freqWindow[s[j] - 'a']++;
+
+            if (window.size() > p.size()) {
+                freqWindow[window[0] - 'a']--;
+                window.erase(window.begin());
+                i++;
+            }
+
+            if (window.size() == p.size() &&  freqWindow == freq) {
+                ans.push_back(i);
+            }
+        }
+        return ans;
+    }
+};
