@@ -1,0 +1,32 @@
+class Solution {
+public:
+    void solve(int n, int i, string &path, vector<string>& ans) {
+
+        if(i == n) {
+            ans.push_back(path);
+            return;
+        }
+
+        // Put 1
+        path.push_back('1');
+        solve(n, i + 1, path, ans);
+        path.pop_back();
+
+        // Put 0 only if previous is not 0
+        if(i == 0 || path.back() != '0') {
+            path.push_back('0');
+            solve(n, i + 1, path, ans);
+            path.pop_back();
+        }
+    }
+
+    vector<string> validStrings(int n) {
+
+        vector<string> ans;
+        string path;
+
+        solve(n, 0, path, ans);
+
+        return ans;
+    }
+};
