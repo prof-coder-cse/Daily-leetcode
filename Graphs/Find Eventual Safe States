@@ -1,0 +1,55 @@
+class Solution {
+public:
+    void bfs(unordered_map<int, vector<int>>& adj, vector<int>& outdegree,  vector<int>& safe) {
+        queue<int> q;
+
+        for (int i = 0; i < outdegree.size(); i++) {
+            if (outdegree[i] == 0) {
+                q.push(i);
+            }
+        }
+        while (!q.empty()) {
+            auto top = q.front();
+            q.pop();
+
+            safe.push_back(top);
+
+            for (auto nbr : adj[top]) {
+                outdegree[nbr]--;
+
+                if (outdegree[nbr] == 0) {
+                    q.push(nbr);
+                }
+            }
+        }
+    }
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        unordered_map<int, vector<int>> adj;
+        vector<int> outdegree(graph.size(), 0);
+        for (int i = 0; i < graph.size(); i++) {
+            for (auto j : graph[i]) {
+                // reverse graph
+                adj[j].push_back(i);
+                // sath me outdegree bhi calculate kr lenge
+                outdegree[i]++;
+                // i = 0
+
+                // graph[0] = {1,2}
+
+                // adj[1].push_back(0)
+                // adj[2].push_back(0)
+
+                // outdegree[0] = 2
+            }
+        }
+        vector<int> safe;
+
+        // BFS
+        bfs(adj, outdegree, safe);
+
+        // Safe nodes ascending order mein chahiye
+        sort(safe.begin(), safe.end());
+
+        return safe;
+    }
+};
