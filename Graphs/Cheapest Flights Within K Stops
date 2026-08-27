@@ -1,0 +1,70 @@
+class Solution {
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+
+        // Adjacency List banao
+        unordered_map<int, vector<pair<int, int>>> adjlist;
+
+        for (auto i : flights) {
+            int u = i[0];
+            int v = i[1];
+            int wt = i[2];
+
+            adjlist[u].push_back({v, wt});
+        }
+
+        // Queue me store hoga:
+        // {stops, {node, cost}}
+        queue<pair<int, pair<int, int>>> q;
+
+        // Har node tak pahunchne ka minimum cost
+        vector<int> dist(n, INT_MAX);
+
+        dist[src] = 0;
+
+        // Source node se start
+        q.push({0, {src, 0}});
+
+        while (!q.empty()) {
+
+            auto toppair = q.front();
+            q.pop();
+
+            int stop = toppair.first;
+            int node = toppair.second.first;
+            int cost = toppair.second.second;
+
+            // Agar allowed stops se jyada ho gaye
+            // to is path ko ignore kar do
+            if (stop > k)
+                continue;
+
+            // Current node ke saare neighbours par jao
+            for (auto nbr : adjlist[node]) {
+
+                int nextnode = nbr.first;
+                int nextcost = nbr.second;
+
+                // Naya cost nikalo
+                int newCost = cost + nextcost;
+
+                // Agar ye pehle se sasta hai
+                if (newCost < dist[nextnode]) {
+
+                    // Distance update karo
+                    dist[nextnode] = newCost;
+
+                    // Queue me next node bhej do
+                    q.push({stop + 1, {nextnode, newCost}});
+                }
+            }
+        }
+
+        // Agar destination tak nahi pahunch paye
+        if (dist[dst] == INT_MAX)
+            return -1;
+
+        // Minimum cost return karo
+        return dist[dst];
+    }
+};
