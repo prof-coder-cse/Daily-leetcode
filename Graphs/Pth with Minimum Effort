@@ -1,0 +1,88 @@
+class Solution {
+public:
+
+    bool issafe(int newx, int newy, int n, int m) {
+        return newx >= 0 && newx < n &&
+               newy >= 0 && newy < m;
+    }
+
+    int minimumEffortPath(vector<vector<int>>& heights) {
+
+        int n = heights.size();
+        int m = heights[0].size();
+
+        // Minimum effort to reach every cell
+        vector<vector<int>> efforts(
+            n, vector<int>(m, INT_MAX)
+        );
+
+        // {effort, {x, y}}
+        set<pair<int, pair<int, int>>> st;
+
+        efforts[0][0] = 0;
+        st.insert({0, {0, 0}});
+
+        while (!st.empty()) {
+
+            auto top = *st.begin();
+            st.erase(st.begin());
+
+            int topefforts = top.first;
+            int x = top.second.first;
+            int y = top.second.second;
+
+            // Destination
+            if (x == n - 1 && y == m - 1) {
+                return topefforts;
+            }
+
+            int dx[] = {-1, 0, 1, 0};
+            int dy[] = {0, 1, 0, -1};
+
+            for (int i = 0; i < 4; i++) {
+
+                int newx = x + dx[i];
+                int newy = y + dy[i];
+
+                if (issafe(newx, newy, n, m)) {
+
+                    // Difference between current and neighbour
+                    int neweffortdiff =
+                        abs(heights[newx][newy] -
+                            heights[x][y]);
+
+                    // Maximum effort till this point
+                    int neweffortmaxtillnow =
+                        max(topefforts, neweffortdiff);
+
+                    // Better path found
+                    if (neweffortmaxtillnow <
+                        efforts[newx][newy]) {
+
+                        // Remove old pair from set
+                        auto it = st.find(
+                            {efforts[newx][newy],
+                             {newx, newy}}
+                        );
+
+                        if (it != st.end()) {
+                            st.erase(it);
+                        }
+
+                        // Update effort
+                        efforts[newx][newy] =
+                            neweffortmaxtillnow;
+
+                        // Insert updated pair
+                        st.insert(
+                            {neweffortmaxtillnow,
+                             {newx, newy}}
+                        );
+                    }
+                }
+            }
+        }
+
+        return 0;
+    }
+};
