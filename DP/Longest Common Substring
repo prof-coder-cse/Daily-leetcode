@@ -1,0 +1,45 @@
+class Solution {
+public:
+
+    int solve(string &s1, string &s2, int i, int j,
+              int &ans, vector<vector<int>> &dp) {
+
+        if(i == s1.size() || j == s2.size()) {
+            return 0;
+        }
+
+        // Already calculated
+        if(dp[i][j] != -1) {
+            ans = max(ans, dp[i][j]);
+            return dp[i][j];
+        }
+
+        int match = 0;
+
+        if(s1[i] == s2[j]) {
+            match = 1 + solve(s1, s2, i + 1, j + 1, ans, dp);
+
+            ans = max(ans, match);
+        }
+
+        // Explore other starting positions
+        solve(s1, s2, i + 1, j, ans, dp);
+        solve(s1, s2, i, j + 1, ans, dp);
+
+        return dp[i][j] = match;
+    }
+
+    int longCommSubstr(string &s1, string &s2) {
+
+        int n = s1.size();
+        int m = s2.size();
+
+        int ans = 0;
+
+        vector<vector<int>> dp(n, vector<int>(m, -1));
+
+        solve(s1, s2, 0, 0, ans, dp);
+
+        return ans;
+    }
+};
