@@ -1,0 +1,62 @@
+class Solution {
+public:
+    bool checkInclusion(string s1, string s2) {
+        int n = s1.size();
+        unordered_map<char , int>mp;
+        for(int i=0; i<n; i++){
+            mp[s1[i]]++;
+        }
+        unordered_map<char , int>window;
+        
+        int left = 0;
+        for(int right = 0; right < s2.size(); right++){
+            window[s2[right]]++;
+            
+            if(right - left + 1 == n){ // window size equals n matlab s1.size() ke equal
+                if(mp == window) return true;
+
+                // shrink window
+                window[s2[left]]--;
+
+                if(window[s2[left]] == 0){
+                    window.erase(s2[left]);
+                }
+                left++;
+            }
+        }
+        return false;
+    }
+};
+
+// class Solution {
+// public:
+//      void generate(string &s1, vector<string> &result, int index) {
+        
+//         // base case
+//         if (index == s1.size()) {
+//             result.push_back(s1);
+//             return;
+//         }
+
+//         for (int i = index; i < s1.size(); i++) {
+//             swap(s1[index], s1[i]);
+
+//             generate(s1, result, index + 1);
+
+//             swap(s1[index], s1[i]); // backtrack
+//         }
+//     }
+//     bool checkInclusion(string s1, string s2) {
+//         // generate all permutation
+//         vector<string>result;
+//         generate(s1 , result , 0);
+
+//         // check in s2
+//         for(auto x:result){
+//             if(s2.find(x) != string::npos){ // npos means not found
+//                 return true;
+//             }
+//         }
+//         return false;
+//     }
+// };
